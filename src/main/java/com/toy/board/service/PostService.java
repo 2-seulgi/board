@@ -23,7 +23,7 @@ public class PostService {
         return posts;
     }
 
-    public Optional<Post> getPost(Long postId){
+    public Optional<Post> getPostByPostId(Long postId){
         return posts.stream().filter(post -> postId.equals(post.getPostId()))
                 .findFirst();
     }
