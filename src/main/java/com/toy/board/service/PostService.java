@@ -1,6 +1,7 @@
 package com.toy.board.service;
 
 import com.toy.board.model.Post;
+import com.toy.board.model.PostPostRequestBody;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
@@ -26,6 +27,14 @@ public class PostService {
     public Optional<Post> getPostByPostId(Long postId){
         return posts.stream().filter(post -> postId.equals(post.getPostId()))
                 .findFirst();
+    }
+
+    public Post createPost(PostPostRequestBody PostPostRequestBody ) {
+        long newPostId = posts.stream().mapToLong(Post::getPostId).max().orElse(0L) + 1;
+        Post newPost = new Post(newPostId, PostPostRequestBody.body(), ZonedDateTime.now());
+
+        posts.add(newPost);
+        return newPost;
     }
 }
 
