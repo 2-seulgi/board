@@ -1,6 +1,7 @@
 package com.toy.board.controller;
 
 import com.toy.board.model.Post;
+import com.toy.board.model.PostPatchRequestBody;
 import com.toy.board.model.PostPostRequestBody;
 import com.toy.board.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +15,12 @@ import java.util.Optional;
 @RestController
 public class PostController {
 
-    @Autowired private PostService postService;
+    @Autowired
+    private PostService postService;
 
     @GetMapping
-    public ResponseEntity<List<Post>> getPosts(){
-        List<Post> posts = postService.getPosts();
+    public ResponseEntity<List<Post>> getPosts() {
+        var posts = postService.getPosts();
 
         return ResponseEntity.ok(posts);
     }
@@ -26,11 +28,11 @@ public class PostController {
     @GetMapping("/{postId}")
     public ResponseEntity<Post> getPostByPostId(
             @PathVariable Long postId
-    ){
+    ) {
         Optional<Post> matchingPost = postService.getPostByPostId(postId);
 
         return matchingPost.map(ResponseEntity::ok)
-                .orElseGet(()-> ResponseEntity.notFound().build());
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
@@ -39,4 +41,11 @@ public class PostController {
         return ResponseEntity.ok(post);
     }
 
+    @PatchMapping("/{postId}")
+    public ResponseEntity<Post> updatePost(
+            @PathVariable Long postId, @RequestBody PostPatchRequestBody postPatchRequestBody
+    ) {
+        var post = postService.updatePost(postId, postPatchRequestBody);
+        return ResponseEntity.ok(post);
+    }
 }
