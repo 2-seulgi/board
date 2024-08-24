@@ -25,12 +25,12 @@ public class PostService {
     }
 
     public Optional<Post> getPostByPostId(Long postId){
-        return posts.stream().filter(post -> postId.equals(post.getPostId()))
+        return posts.stream().filter(post -> postId.equals(post.postId()))
                 .findFirst();
     }
 
     public Post createPost(PostPostRequestBody PostPostRequestBody ) {
-        long newPostId = posts.stream().mapToLong(Post::getPostId).max().orElse(0L) + 1;
+        long newPostId = posts.stream().mapToLong(Post::postId).max().orElse(0L) + 1;
         Post newPost = new Post(newPostId, PostPostRequestBody.body(), ZonedDateTime.now());
 
         posts.add(newPost);
