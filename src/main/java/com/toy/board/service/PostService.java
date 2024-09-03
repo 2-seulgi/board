@@ -1,14 +1,13 @@
 package com.toy.board.service;
 
+import com.toy.board.exception.post.PostNotFoundException;
 import com.toy.board.model.Post;
 import com.toy.board.model.PostPatchRequestBody;
 import com.toy.board.model.PostPostRequestBody;
 import com.toy.board.model.entity.PostEntity;
 import com.toy.board.repository.PostEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -26,7 +25,7 @@ public class PostService {
     public Post getPostByPostId(Long postId){
         var postEntity = postEntityRepository.findById(postId)
                 .orElseThrow(
-                        ()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Post not found")
+                        ()-> new PostNotFoundException(postId)
                 );
         return Post.from(postEntity);
     }
@@ -44,7 +43,7 @@ public class PostService {
 
         var postEntity = postEntityRepository.findById(postId)
                 .orElseThrow(
-                        ()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Post not found")
+                        ()-> new PostNotFoundException(postId)
                 );
         postEntity.setBody(postPatchRequestBody.body());
         PostEntity updatedPostEntity = postEntityRepository.save(postEntity);
@@ -55,7 +54,7 @@ public class PostService {
     public void deletePost(Long postId) {
         var postEntity = postEntityRepository.findById(postId)
                 .orElseThrow(
-                        ()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"Post not found")
+                        ()-> new PostNotFoundException(postId)
                 );
         postEntityRepository.delete(postEntity);
     }
