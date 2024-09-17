@@ -6,11 +6,11 @@ import java.time.ZonedDateTime;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record Post (
-    Long postId,
-    String body,
-    ZonedDateTime createDateTime,
-    ZonedDateTime updateDateTime,
-    ZonedDateTime deleteDataTime){
+        Long postId,
+        String body,
+        ZonedDateTime createDateTime,
+        ZonedDateTime updateDateTime,
+        ZonedDateTime deleteDataTime){
 
     public static Post from(PostEntity postEntity){
         return new Post(
