@@ -125,7 +125,7 @@ public class UserEntity implements UserDetails {
         userEntity.setPassword(password);
 
         //랜덤한 프로필 사진 설정
-        userEntity.setProfile("https://avatar.iran.liara.run/public/" + new Random().nextInt(100));
+        userEntity.setProfile("https://avatar.iran.liara.run/public/" + (new Random().nextInt(100) + 1));
 
         return userEntity;
     }
