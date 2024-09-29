@@ -1,7 +1,9 @@
 package com.toy.board.exception;
 
-import com.toy.board.model.ClientErrorResponse;
+import com.toy.board.model.error.ClientErrorResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -13,5 +15,27 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(
                 new ClientErrorResponse(e.getStatus(), e.getMessage()), e.getStatus()
         );
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ClientErrorResponse> handleClientErrorException(MethodArgumentNotValidException e){
+        var errorMessage =
+                e.getFieldErrors().stream()
+                        .map(fieldError -> (fieldError.getField()+": "+ fieldError.getDefaultMessage()))
+                        .toList()
+                        .toString();
+
+        return new ResponseEntity<>(
+                new ClientErrorResponse(HttpStatus.BAD_REQUEST, errorMessage),HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ClientErrorResponse> handleClientErrorException(RuntimeException e){
+        return ResponseEntity.internalServerError().build();
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ClientErrorResponse> handleClientErrorException(Exception e){
+        return ResponseEntity.internalServerError().build();
     }
 }

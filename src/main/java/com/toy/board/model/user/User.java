@@ -1,6 +1,5 @@
 package com.toy.board.model.user;
 
-import com.toy.board.model.Post;
 import com.toy.board.model.entity.UserEntity;
 
 import java.time.ZonedDateTime;

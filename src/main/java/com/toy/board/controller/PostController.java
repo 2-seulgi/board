@@ -1,8 +1,8 @@
 package com.toy.board.controller;
 
-import com.toy.board.model.Post;
-import com.toy.board.model.PostPatchRequestBody;
-import com.toy.board.model.PostPostRequestBody;
+import com.toy.board.model.post.Post;
+import com.toy.board.model.post.PostPatchRequestBody;
+import com.toy.board.model.post.PostPostRequestBody;
 import com.toy.board.service.PostService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

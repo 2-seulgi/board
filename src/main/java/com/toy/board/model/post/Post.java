@@ -1,4 +1,4 @@
-package com.toy.board.model;
+package com.toy.board.model.post;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.toy.board.model.entity.PostEntity;
 

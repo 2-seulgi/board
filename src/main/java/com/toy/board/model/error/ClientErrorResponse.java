@@ -1,4 +1,4 @@
-package com.toy.board.model;
+package com.toy.board.model.error;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.http.HttpStatus;

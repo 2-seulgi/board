@@ -1,9 +1,9 @@
 package com.toy.board.service;
 
 import com.toy.board.exception.post.PostNotFoundException;
-import com.toy.board.model.Post;
-import com.toy.board.model.PostPatchRequestBody;
-import com.toy.board.model.PostPostRequestBody;
+import com.toy.board.model.post.Post;
+import com.toy.board.model.post.PostPatchRequestBody;
+import com.toy.board.model.post.PostPostRequestBody;
 import com.toy.board.model.entity.PostEntity;
 import com.toy.board.repository.PostEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
