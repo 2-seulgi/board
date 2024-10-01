@@ -1,5 +1,7 @@
 package com.toy.board.controller;
 
+import com.toy.board.model.user.UserAuthenticationResponse;
+import com.toy.board.model.user.UserLoginRequestBody;
 import com.toy.board.model.user.UserSignUpRequestBody;
 import com.toy.board.model.user.User;
 import com.toy.board.service.UserService;
@@ -21,6 +23,13 @@ public class UserController {
     public ResponseEntity<User> signUp(@Valid @RequestBody UserSignUpRequestBody userSignUpRequestBody){
         var user = userService.signUp(userSignUpRequestBody.username(), userSignUpRequestBody.password());
         return ResponseEntity.ok(user);
+
+    }
+
+    @PostMapping("/authenticate")
+    public ResponseEntity<UserAuthenticationResponse> authenticate(@Valid @RequestBody UserLoginRequestBody userLoginRequestBody){
+        var response = userService.authenticate(userLoginRequestBody.username(), userLoginRequestBody.password());
+        return ResponseEntity.ok(response);
 
     }
 }

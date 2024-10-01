@@ -31,9 +31,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // 특정 경로는 JWT 인증을 적용하지 않음
         String path = request.getRequestURI();
-        if (path.equals("/api/v1/users") && request.getMethod().equals(HttpMethod.POST.name())) {
-            filterChain.doFilter(request, response);
-            return; // 이 경로에 대해선 JWT 인증을 하지 않음
+        if ("/api/v1/users".equals(path) || "/api/v1/users/authenticate".equals(path)) {
+            if (HttpMethod.POST.matches(request.getMethod())) {
+                filterChain.doFilter(request, response);
+                return; // 이 경로에 대해선 JWT 인증을 하지 않음
+            }
         }
 
         String BEARER_PREFIX = "Bearer ";
@@ -45,7 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (!ObjectUtils.isEmpty(authorization) && authorization.startsWith(BEARER_PREFIX)
         && securityContext.getAuthentication() == null){
             var accessToken = authorization.substring(BEARER_PREFIX.length());
-             var username = jwtService.getUsername(accessToken);
+            var username = jwtService.getUsername(accessToken);
             var userDetails = userService.loadUserByUsername(username);
 
             var authenticationToken = new UsernamePasswordAuthenticationToken(
