@@ -1,5 +1,6 @@
 package com.toy.board.model.entity;
 
+import com.toy.board.model.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.SQLDelete;
@@ -10,7 +11,9 @@ import java.util.Objects;
 
 @Getter
 @Entity
-@Table(name = "post")
+@Table(
+    name = "post",
+    indexes = {@Index(name = "post_userid_idx", columnList ="userid" )})
 @SQLDelete(sql="UPDATE \"post\" SET deletedatetime = CURRENT_TIMESTAMP WHERE postId = ?" )
 @SQLRestriction("deletedatetime IS NULL")
 public class PostEntity {
@@ -25,6 +28,10 @@ public class PostEntity {
     private ZonedDateTime updateDateTime;
     @Column
     private ZonedDateTime deleteDateTime;
+
+    @ManyToOne
+    @JoinColumn(name = "userid")
+    private UserEntity user;
 
     public void setPostId(Long postId) {
         this.postId = postId;
@@ -46,16 +53,20 @@ public class PostEntity {
         this.deleteDateTime = deleteDateTime;
     }
 
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof PostEntity that)) return false;
-        return Objects.equals(getPostId(), that.getPostId()) && Objects.equals(getBody(), that.getBody()) && Objects.equals(getCreateDateTime(), that.getCreateDateTime()) && Objects.equals(getUpdateDateTime(), that.getUpdateDateTime()) && Objects.equals(getDeleteDateTime(), that.getDeleteDateTime());
+        return Objects.equals(getPostId(), that.getPostId()) && Objects.equals(getBody(), that.getBody()) && Objects.equals(getCreateDateTime(), that.getCreateDateTime()) && Objects.equals(getUpdateDateTime(), that.getUpdateDateTime()) && Objects.equals(getDeleteDateTime(), that.getDeleteDateTime()) && Objects.equals(getUser(), that.getUser());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getPostId(), getBody(), getCreateDateTime(), getUpdateDateTime(), getDeleteDateTime());
+        return Objects.hash(getPostId(), getBody(), getCreateDateTime(), getUpdateDateTime(), getDeleteDateTime(), getUser());
     }
 
     @PrePersist
