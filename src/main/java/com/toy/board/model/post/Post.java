@@ -1,6 +1,7 @@
 package com.toy.board.model.post;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.toy.board.model.entity.PostEntity;
+import com.toy.board.model.user.User;
 
 import java.time.ZonedDateTime;
 
@@ -8,6 +9,7 @@ import java.time.ZonedDateTime;
 public record Post (
         Long postId,
         String body,
+        User user,
         ZonedDateTime createDateTime,
         ZonedDateTime updateDateTime,
         ZonedDateTime deleteDataTime){
@@ -16,6 +18,7 @@ public record Post (
         return new Post(
                 postEntity.getPostId(),
                 postEntity.getBody(),
+                User.from(postEntity.getUser()),
                 postEntity.getCreateDateTime(),
                 postEntity.getUpdateDateTime(),
                 postEntity.getDeleteDateTime()

@@ -1,6 +1,7 @@
 package com.toy.board.model.entity;
 
 import com.toy.board.model.user.User;
+import com.toy.board.repository.PostEntityRepository;
 import jakarta.persistence.*;
 import lombok.Getter;
 import org.hibernate.annotations.SQLDelete;
@@ -67,6 +68,14 @@ public class PostEntity {
     @Override
     public int hashCode() {
         return Objects.hash(getPostId(), getBody(), getCreateDateTime(), getUpdateDateTime(), getDeleteDateTime(), getUser());
+    }
+
+    public static PostEntity of(String body, UserEntity user){
+        var post = new PostEntity();
+        post.setBody(body);
+        post.setUser(user);
+
+        return post;
     }
 
     @PrePersist

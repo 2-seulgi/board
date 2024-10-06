@@ -1,10 +1,14 @@
 package com.toy.board.service;
 
 import com.toy.board.exception.post.PostNotFoundException;
+import com.toy.board.exception.user.UserNotAllowedException;
+import com.toy.board.exception.user.UserNotFoundException;
+import com.toy.board.model.entity.UserEntity;
 import com.toy.board.model.post.Post;
 import com.toy.board.model.post.PostPatchRequestBody;
 import com.toy.board.model.post.PostPostRequestBody;
 import com.toy.board.model.entity.PostEntity;
+import com.toy.board.model.user.User;
 import com.toy.board.repository.PostEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,32 +34,35 @@ public class PostService {
         return Post.from(postEntity);
     }
 
-    public Post createPost(PostPostRequestBody postPostRequestBody ) {
-        var postEntity = new PostEntity();
-        postEntity.setBody(postPostRequestBody.body());
-
-        var savedPostEntity = postEntityRepository.save(postEntity);
-
-        return Post.from(savedPostEntity);
+    public Post createPost(PostPostRequestBody postPostRequestBody, UserEntity currentUser) {
+        var postEntity = postEntityRepository.save(
+                PostEntity.of(postPostRequestBody.body(), currentUser)
+        );
+        return Post.from(postEntity);
     }
 
-    public Post updatePost(Long postId, PostPatchRequestBody postPatchRequestBody) {
+    public Post updatePost(Long postId, PostPatchRequestBody postPatchRequestBody, UserEntity currentUser) {
 
         var postEntity = postEntityRepository.findById(postId)
                 .orElseThrow(
                         ()-> new PostNotFoundException(postId)
                 );
+        if(!postEntity.getUser().equals(currentUser)){
+            throw new UserNotAllowedException();
+        }
         postEntity.setBody(postPatchRequestBody.body());
-        PostEntity updatedPostEntity = postEntityRepository.save(postEntity);
-
+        var updatedPostEntity = postEntityRepository.save(postEntity);
         return Post.from(updatedPostEntity);
     }
 
-    public void deletePost(Long postId) {
+    public void deletePost(Long postId,  UserEntity currentUser) {
         var postEntity = postEntityRepository.findById(postId)
                 .orElseThrow(
                         ()-> new PostNotFoundException(postId)
                 );
+        if(!postEntity.getUser().equals(currentUser)){
+            throw new UserNotAllowedException();
+        }
         postEntityRepository.delete(postEntity);
     }
 }
