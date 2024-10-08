@@ -10,6 +10,7 @@ import com.toy.board.model.post.PostPostRequestBody;
 import com.toy.board.model.entity.PostEntity;
 import com.toy.board.model.user.User;
 import com.toy.board.repository.PostEntityRepository;
+import com.toy.board.repository.UserEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import java.util.List;
 public class PostService {
 
     @Autowired private PostEntityRepository postEntityRepository;
+    @Autowired private UserEntityRepository userEntityRepository;
 
     public List<Post> getPosts(){
         var postEntities  = postEntityRepository.findAll();
@@ -64,6 +66,16 @@ public class PostService {
             throw new UserNotAllowedException();
         }
         postEntityRepository.delete(postEntity);
+    }
+
+
+    public List<Post> getPostsByUsername(String username) {
+        var userEntity = userEntityRepository
+                .findByUsername(username)
+                .orElseThrow(()->new UserNotFoundException(username));
+        var postEntities = postEntityRepository.findByUser(userEntity);
+
+        return postEntities.stream().map(Post::from).toList();
     }
 }
 
