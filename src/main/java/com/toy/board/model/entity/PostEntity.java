@@ -24,6 +24,8 @@ public class PostEntity {
     @Column(columnDefinition = "TEXT")
     private String body;
     @Column
+    private Long repliesCount = 0L;
+    @Column
     private ZonedDateTime createDateTime;
     @Column
     private ZonedDateTime updateDateTime;
@@ -40,6 +42,10 @@ public class PostEntity {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public void setRepliesCount(Long repliesCount) {
+        this.repliesCount = repliesCount;
     }
 
     public void setCreateDateTime(ZonedDateTime createDateTime) {
@@ -62,12 +68,12 @@ public class PostEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof PostEntity that)) return false;
-        return Objects.equals(getPostId(), that.getPostId()) && Objects.equals(getBody(), that.getBody()) && Objects.equals(getCreateDateTime(), that.getCreateDateTime()) && Objects.equals(getUpdateDateTime(), that.getUpdateDateTime()) && Objects.equals(getDeleteDateTime(), that.getDeleteDateTime()) && Objects.equals(getUser(), that.getUser());
+        return Objects.equals(getPostId(), that.getPostId()) && Objects.equals(getBody(), that.getBody()) && Objects.equals(getRepliesCount(), that.getRepliesCount()) && Objects.equals(getCreateDateTime(), that.getCreateDateTime()) && Objects.equals(getUpdateDateTime(), that.getUpdateDateTime()) && Objects.equals(getDeleteDateTime(), that.getDeleteDateTime()) && Objects.equals(getUser(), that.getUser());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getPostId(), getBody(), getCreateDateTime(), getUpdateDateTime(), getDeleteDateTime(), getUser());
+        return Objects.hash(getPostId(), getBody(), getRepliesCount(), getCreateDateTime(), getUpdateDateTime(), getDeleteDateTime(), getUser());
     }
 
     public static PostEntity of(String body, UserEntity user){

@@ -14,7 +14,8 @@ import java.util.Objects;
 @Entity
 @Table(
     name = "reply",
-    indexes = {@Index(name = "reply_userid_idx", columnList ="userid" )})
+    indexes = {@Index(name = "reply_userid_idx", columnList ="userid" ),
+               @Index(name = "reply_userid_idx", columnList ="userid" )})
 @SQLDelete(sql="UPDATE \"reply\" SET deletedatetime = CURRENT_TIMESTAMP WHERE replyid = ?" )
 @SQLRestriction("deletedatetime IS NULL")
 public class ReplyEntity {

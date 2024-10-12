@@ -18,6 +18,7 @@ import com.toy.board.repository.ReplyEntityRepository;
 import com.toy.board.repository.UserEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -39,6 +40,7 @@ public class ReplyService {
         return replyEntities.stream().map(Reply::from).toList();
     }
 
+    @Transactional
     public Reply createReply(Long postId, ReplyPostRequestBody replyPostRequestBody, UserEntity currentUser) {
         var postEntity = postEntityRepository.findById(postId)
                 .orElseThrow(
@@ -48,6 +50,8 @@ public class ReplyService {
         var replyEntity = replyEntityRepository.save(
                 ReplyEntity.of(replyPostRequestBody.body(), currentUser, postEntity)
         );
+
+        postEntity.setRepliesCount(postEntity.getRepliesCount() + 1);
         return Reply.from(replyEntity);
     }
 
@@ -69,8 +73,9 @@ public class ReplyService {
         return Reply.from(updatedReplyEntity);
     }
 
+    @Transactional
     public void deleteReply(Long postId, Long replyId, UserEntity currentUser) {
-         postEntityRepository.findById(postId)
+         var postEntity = postEntityRepository.findById(postId)
                 .orElseThrow(
                         ()-> new PostNotFoundException(postId)
                 );
@@ -82,6 +87,10 @@ public class ReplyService {
             throw new UserNotAllowedException();
         }
         replyEntityRepository.delete(replyEntity);
+
+        postEntity.setRepliesCount(Math.max(0, postEntity.getRepliesCount() - 1));
+        postEntityRepository.save(postEntity);
+
     }
 
 
