@@ -1,5 +1,6 @@
 package com.toy.board.controller;
 
+import com.toy.board.model.entity.LikeEntity;
 import com.toy.board.model.entity.UserEntity;
 import com.toy.board.model.post.Post;
 import com.toy.board.model.post.PostPatchRequestBody;
@@ -59,11 +60,17 @@ public class PostController {
         return ResponseEntity.ok(post);
     }
 
-
     @DeleteMapping ("/{postId}")
     public ResponseEntity<Void> deletePost( @PathVariable Long postId, Authentication authentication ) {
         logger.info("DELETE /api/v1/posts/{}", postId);
         postService.deletePost(postId, (UserEntity)authentication.getPrincipal());
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping ("/{postId}/likes")
+    public ResponseEntity<Post> toggleLike(@PathVariable Long postId, Authentication authentication ) {
+        var post = postService.toggleLike(postId, (UserEntity)authentication.getPrincipal());
+        return ResponseEntity.ok(post);
+    }
+
 }

@@ -26,6 +26,8 @@ public class PostEntity {
     @Column
     private Long repliesCount = 0L;
     @Column
+    private Long likesCount = 0L;
+    @Column
     private ZonedDateTime createDateTime;
     @Column
     private ZonedDateTime updateDateTime;
@@ -48,6 +50,10 @@ public class PostEntity {
         this.repliesCount = repliesCount;
     }
 
+    public void setLikesCount(Long likesCount) {
+        this.likesCount = likesCount;
+    }
+
     public void setCreateDateTime(ZonedDateTime createDateTime) {
         this.createDateTime = createDateTime;
     }
@@ -68,12 +74,12 @@ public class PostEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof PostEntity that)) return false;
-        return Objects.equals(getPostId(), that.getPostId()) && Objects.equals(getBody(), that.getBody()) && Objects.equals(getRepliesCount(), that.getRepliesCount()) && Objects.equals(getCreateDateTime(), that.getCreateDateTime()) && Objects.equals(getUpdateDateTime(), that.getUpdateDateTime()) && Objects.equals(getDeleteDateTime(), that.getDeleteDateTime()) && Objects.equals(getUser(), that.getUser());
+        return Objects.equals(getPostId(), that.getPostId()) && Objects.equals(getBody(), that.getBody()) && Objects.equals(getRepliesCount(), that.getRepliesCount()) && Objects.equals(getLikesCount(), that.getLikesCount()) && Objects.equals(getCreateDateTime(), that.getCreateDateTime()) && Objects.equals(getUpdateDateTime(), that.getUpdateDateTime()) && Objects.equals(getDeleteDateTime(), that.getDeleteDateTime()) && Objects.equals(getUser(), that.getUser());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getPostId(), getBody(), getRepliesCount(), getCreateDateTime(), getUpdateDateTime(), getDeleteDateTime(), getUser());
+        return Objects.hash(getPostId(), getBody(), getRepliesCount(), getLikesCount(), getCreateDateTime(), getUpdateDateTime(), getDeleteDateTime(), getUser());
     }
 
     public static PostEntity of(String body, UserEntity user){
